@@ -1,0 +1,94 @@
+﻿@{
+    Layout = "../Layout/_LayoutCliente.cshtml";
+    ViewData["Title"] = "Chat Net - Chats";
+}
+
+@section Styles {
+    <style>
+        .image img{
+            height: 45px;
+            width: 45px;
+            margin: 0 15px;
+            border-radius:20px;
+        }
+
+        .right .direct-chat-text {
+            margin-left: 0;
+            margin-right: 10px;
+        }
+
+        .left .direct-chat-text {
+            margin-left: 10px;
+            margin-right: 0;
+        }
+
+        .direct-chat-messages{
+            position: relative;
+            min-height: 500px;
+            max-height: 500px;
+            overflow-y: auto;
+            scrollbar-color: rgba(0, 0, 0, .5) rgba(0, 0, 0, 0);
+            scrollbar-width: thin;
+            padding: 10px 30px 20px 30px;
+            box-shadow: inset 0 32px 32px -32px rgb(0 0 0 / 5%), inset 0 -32px 32px -32px rgb(0 0 0 / 5%);
+        }
+    </style>
+}
+
+@section Scripts {
+
+}
+
+<section>
+    <div class="container">
+        <div class="row g-3 justify-content-around p-4">
+            <div class="col-lg-8 col-md-8 col-sm-12 pb-2">
+                <div id="informacion">
+                    @{
+                        Html.RenderPartial("../Chats/_InformacionUsuario.cshtml");
+                    }
+                </div>
+                <div id="chat">
+                    @{
+                        Html.RenderPartial("../Chats/_ChatUsuario.cshtml");
+                    }
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 d-lg-block d-md-block d-sm-none">
+                @{
+                    Html.RenderPartial("../Chats/_ListarAmigos.cshtml");
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $('#chat').hide()
+    $('#buscador').keyup(function (e) {
+        if ($(this).val() == "") {
+            $("#friends .informacion_amigos").show();
+        } else {
+            $("#friends .informacion_amigos").hide();
+            $("#friends .informacion_amigos[data-filter\*='" + $(this).val().toUpperCase() + "']").show();
+        }
+    });
+
+    $(".enviar_mensaje").attr({ 'disabled': true })
+    $('#message').keyup(function (e) {
+        e.preventDefault();
+        if ($(this).val().length > 0) {
+            $(".enviar_mensaje").attr({ 'disabled': false })
+        } else {
+            $(".enviar_mensaje").attr({ 'disabled': true })
+        }
+    });
+
+    setInterval(() => {
+        if ($('#friend_id').val() != '' || $('#friend_id').val() != undefined) {
+            ListarChat()
+        }
+       ListarUsuario()
+    },1000)
+    
+</script>

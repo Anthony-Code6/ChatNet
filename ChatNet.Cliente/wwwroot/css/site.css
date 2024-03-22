@@ -1,0 +1,9 @@
+*{
+    font-family:'Times New Roman', Times, serif;
+}
+
+body {
+    background-color: black;
+    background-image: url("../dist/img/fondos/fondo.gif") ;
+    background-size: cover;
+}

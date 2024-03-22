@@ -1,0 +1,105 @@
+﻿<div class="card card-body bg-dark" style="border-radius:30px;">
+    <div class="pb-3">
+        <input type="text" name="buscador" id="buscador" class="form-control bg-dark border border-success text-success" placeholder="Buscar Amigos ....." />
+    </div>
+    <div id="friends"></div>
+</div>
+<script>
+    const ListarUsuario = async () => {
+        await $.ajax({
+            type: "GET",
+            url: "/Chats/Informacion",
+            data: false,
+            dataType: "json",
+            success: function (response) {
+                var data = JSON.parse(response)
+                let temple = ''
+
+                data._usuarios.forEach(element => {
+                    temple += `
+                                <div class="d-flex informacion_amigos" data-filter="${element.nombre.toUpperCase() + ' ' + element.apellido.toUpperCase()}" data-id="${element.idUsuario}" onclick="Conversacion(this)" style="cursor:pointer;">
+                            <div class="image me-4">
+                                <img src="dist/img/logo.jpeg" class="" alt="">
+                            </div>
+                            <div class="detalles text-success">
+                                        <spam id="name_friend">${element.nombre + ' ' + element.apellido}</spam>
+                                <p id="status_friend">Activo</p>
+                            </div>
+                        </div>
+                    `
+                })
+
+                $('#friends').html(temple)
+
+            }, beforeSend: function () {
+                console.log('Esperando ....')
+            }
+        });
+    }
+
+    ListarUsuario()
+
+    const Conversacion = async (e) =>{
+        var idamigo = $(e).attr('data-id')
+        await $.ajax({
+            type: "GET",
+            url: "/Chats/InformacionChat?idamigo="+idamigo,
+            data: false,
+            dataType: "json",
+            success: function (response) {
+                var data = JSON.parse(response)
+                $('#chat').show()
+                $('#chat_name').text(data._usuario["nombre"] + ' ' + data._usuario["apellido"])
+                $('#chat_email').text(data._usuario["correo"])
+                $('#friend_id').val(data._usuario['idUsuario'])
+
+                ListarChat()
+
+            }, beforeSend: function () {
+                console.log('Esperando ....')
+            }
+        });
+    }
+
+    const ListarChat = async () => {
+        await $.ajax({
+            type: "GET",
+            url: "/Chats/InformacionChat?idamigo=" + $('#friend_id').val(),
+            data: false,
+            dataType: "json",
+            success: function (response) {
+                var data = JSON.parse(response)
+                let temple = ''
+
+                data._mensaje.forEach(element => {
+                   
+                    if (element.idEnvia == 1) {
+                        temple += `
+                                <div class="direct-chat-msg right">
+                                    <img class="direct-chat-img" src="dist/img/fondos/logo_user.png" alt="Message User Image">
+                                    <div class="direct-chat-text d-inline-flex float-right">
+                                            ${element.mensaje}
+                                    </div>
+                                </div>
+                            `
+                    }else{
+                        temple += `
+                            <div class="direct-chat-msg left">
+                                <img class="direct-chat-img" src="dist/img/fondos/logo_user.png" alt="Message User Image">
+                                <div class="direct-chat-text d-inline-flex float-left">
+                                            ${element.mensaje}
+                                </div>
+                            </div>
+                        `
+                    }
+                })
+
+                $('.direct-chat-messages').html(temple)
+
+            }, beforeSend: function () {
+                console.log('Esperando ....')
+            }
+        });
+    }
+
+</script>

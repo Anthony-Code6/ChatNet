@@ -1,0 +1,30 @@
+﻿<div class="card card-body bg-dark" style="border-radius:30px;">
+    <div class="d-flex">
+        <div class="image me-4">
+            <img src="dist/img/logo.jpeg" class="" alt="">
+        </div>
+        <div class="detalles text-success">
+            <spam id="name_users"></spam>
+            <p id="status_users">Activo</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const InformacionUsuario = async () => {
+        await $.ajax({
+            type: "GET",
+            url: "/Chats/Informacion",
+            data: false,
+            dataType: "json",
+            success: function (response) {
+                var data = JSON.parse(response)
+                $('#name_users').text(data._usuario["nombre"] + ' ' + data._usuario["apellido"])
+            }, beforeSend: function () {
+                console.log('Esperando ....')
+            }
+        });
+    }
+
+    InformacionUsuario()
+</script>

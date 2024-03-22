@@ -1,0 +1,65 @@
+﻿@{
+    Layout = "../Layout/_LayoutCliente.cshtml";
+    ViewData["Title"] = "Chat Net";
+}
+
+@section Styles{
+
+}
+
+@section Scripts {
+
+}
+
+<section>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-9 col-sm-12 col-6 mt-5">
+                <div class="card text-success bg-dark" style="border-radius: 10px;">
+                    <div class="card-body">
+                       <div class="usuario">
+                           @{
+                               Html.RenderPartial("../Home/_CrearUsuario.cshtml");
+                           }
+                       </div>
+                       <div class="login">
+                            @{
+                                Html.RenderPartial("../Home/_LoginUsuario.cshtml");
+                            }
+                       </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $('.usuario').hide()
+    $('.login').show()
+
+    const LimpiarUsuario = () => {
+        $('#nombre').val('')
+        $('#apellido').val('')
+        $('#correo').val('')
+        $('#password').val('')
+    }
+
+    const LimpiarLogin = () => {
+        $('#correo_').val('')
+        $('#password_').val('')
+    }
+
+    const CrearUsuario = () => {
+        $('.usuario').show()
+        $('.login').hide()
+        LimpiarUsuario()
+    }
+
+    const LoginUsuario = () => {
+        $('.usuario').hide()
+        $('.login').show()
+        LimpiarLogin()
+    }
+
+</script>
